@@ -27,14 +27,10 @@
   (def g "String")
   (def h 'customkey)
 
-  (println a)
-  (println b)
-  (println c)
-  (println d)
-  (println e)
-  (println f)
-  (println g)
-  (println h)
+  (def status true)
+  (def STATUS false)
+
+  (println a b c d e f g h status STATUS)
 )
 
 (DataTypes)
