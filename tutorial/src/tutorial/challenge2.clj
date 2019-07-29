@@ -1,24 +1,41 @@
 (ns tutorial.challenge2)
 
-(defn CheckCoupon [code]
-  (def validCoupons [123 456 789])
-  (some #(= code %) validCoupons))
+(defn CheckCouponCode [code]
+  (defstruct coupon :Name :Discount)
+  (def validCoupon (struct coupon "20OFF" 0.8))
+  (if (= (:Name validCoupon) code)
+    true
+    false))
 
-(defn ApplyDiscount
+; (CheckCouponCode "20OFF")
+
+(defn GetCarPrices
   [budget code]
-  (def couponIsValid (CheckCoupon code))
-  (cond
-    (and
-      (= couponIsValid nil)
-      (= budget 50000)) (do
-        (println "FIAT: 20.0000"))
-    (and
-      (not= couponIsValid nil)
-      (= budget 50000)) (do
-        (println "BMW: 48.000")
-        (println "FIAT: 16.000"))
-    :else (println "Invalid Budget or Coupon Code")
+  (def cars {"bmw" 60000 "ferrari" 100000 "fiat" 20000})
+  (if (CheckCouponCode code)
+    (do
+      (println "Valid coupon :)")
+      (def discount (:Discount validCoupon))
+      (doseq [car cars]
+        (def carType (first car))
+        (def carPrice (last car))
+        (def discountPrice (* carPrice discount))
+        (if (<= discountPrice budget)
+          (println "The" carType "costs:" discountPrice)
+        )
+      )
+    )
+    (do
+      (println "Invalid coupon :(")
+      (doseq [car cars]
+        (def carType (first car))
+        (def carPrice (last car))
+        (if (<= carPrice budget)
+          (println "The" carType "costs:" carPrice)
+        )
+      )
+    )
   )
 )
 
-(ApplyDiscount 50000 1234)
+; (GetCarPrices 50000 "20OFF")
